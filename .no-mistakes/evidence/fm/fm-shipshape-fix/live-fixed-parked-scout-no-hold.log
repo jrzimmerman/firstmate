@@ -1,0 +1,36 @@
+--- backlog
+## In flight
+
+## Queued
+- [ ] plan-scout - investigate the board (since 2026-10-30)
+
+## Done
+--- driving watcher (/Users/justin/.no-mistakes/worktrees/acf03fba152a/01M65HRRKZ7RA864227FMGEYT8/bin) for 75s on live pane fm:fm-scout, status: needs-decision [key=board-review]: the board is ready for the captain
+  t=6s watcher #1 exited with wake: stale: fm:fm-scout|
+  t=17s watcher #2 exited with wake: stale: fm:fm-scout|
+  t=30s watcher #3 exited with wake: stale: fm:fm-scout|
+  t=43s watcher #4 exited with wake: stale: fm:fm-scout|
+  t=54s watcher #5 exited with wake: stale: fm:fm-scout|
+  t=66s watcher #6 exited with wake: stale: fm:fm-scout|
+  t=75s watcher #7 still running at end (absorbing)
+--- pane at end:
+> board review ready
+  Opus 5.5 | ctx 41% | 5h 61% (in 4h53m)
+--- state:
+. .. .count-fm_fm-scout .drain.err .hash-fm_fm-scout .hb-surfaced-plan-scout .heartbeat-streak .inactive-outcome-reconcile .last-check .last-heartbeat .last-watcher-beat .secondmate-liveness-tick .seen-plan-scout_status .stale-fm_fm-scout .wake-queue .wake-queue.seq .watch-deliveries.log .watcher-down home-summary.json plan-scout.meta plan-scout.status terminal-outcomes 
+== /var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T//fm-lab.ev9KCd/watch.1.out
+stale: fm:fm-scout
+== /var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T//fm-lab.ev9KCd/watch.2.out
+stale: fm:fm-scout
+== /var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T//fm-lab.ev9KCd/watch.3.out
+stale: fm:fm-scout
+== /var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T//fm-lab.ev9KCd/watch.4.out
+stale: fm:fm-scout
+== /var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T//fm-lab.ev9KCd/watch.5.out
+stale: fm:fm-scout
+== /var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T//fm-lab.ev9KCd/watch.6.out
+stale: fm:fm-scout
+== /var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T//fm-lab.ev9KCd/watch.7.out
+count=1
+--- triage log:
+RESULT label=fixed-parked-no-hold watcher_launches=7 wake_exits=6

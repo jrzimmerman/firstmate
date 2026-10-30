@@ -1,0 +1,26 @@
+$ fm-captain-hold.sh open-origin plan-scout
+exit=1
+# legacy <origin>-decision-<key> row without an origin line:
+$ fm-captain-hold.sh open-origin plan-scout
+exit=1
+# call held for a different origin:
+$ fm-captain-hold.sh open-origin plan-scout
+exit=1
+# call held with --origin plan-scout:
+$ fm-captain-hold.sh open-origin plan-scout
+exit=0
+$ fm-captain-hold.sh open-origin plan-scout --identity
+scout-board-design@2026-10-30T05:20:04Z#0
+exit=0
+$ fm-captain-hold.sh open plan-scout
+exit=1
+# after answer --release:
+$ fm-captain-hold.sh open-origin plan-scout
+exit=1
+# after re-hold (identity changes):
+$ fm-captain-hold.sh open-origin plan-scout --identity
+scout-board-design@2026-10-30T05:20:10Z#1
+exit=0
+$ fm-captain-hold.sh open-origin bad/slug
+fm-captain-hold: origin id must be a non-empty privacy-safe slug: bad/slug
+exit=2

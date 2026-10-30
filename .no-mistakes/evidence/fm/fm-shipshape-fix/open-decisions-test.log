@@ -1,0 +1,17 @@
+1..12
+ok - absent flag emits nothing and does not fold status
+ok - oldest key surfaces once, and independent per-key backoff doubles up to its cap
+ok - keys 1 and 01 receive separate reminders and retain independent bounded backoff
+ok - tasks 1 and 01 receive separate reminders and retain independent bounded backoff
+ok - resolution stops reminders immediately and a later episode starts fresh
+ok - an origin-linked captain call bounds a parked scout and leaves a working one its alarms
+ok - paused waits, verified transfers, and backlog captain holds are exempt
+ok - only explicitly keyed records with valid source timestamps are aged
+ok - quiet polls reuse the timed fold and only new status bytes are folded
+watcher: invalid open-decision reminder settings
+watcher: open-decision backoff cap is below threshold
+ok - invalid settings refuse the tick without queueing reminders
+ok - task retirement removes the timed cursor and ends reminders
+ok - the actual watcher wakes and exits on an overdue key without any recorded pane
+FM_TEST_COMPLETE
+bash tests/fm-watch-open-decisions.test.sh  8.06s user 9.29s system 88% cpu 19.589 total

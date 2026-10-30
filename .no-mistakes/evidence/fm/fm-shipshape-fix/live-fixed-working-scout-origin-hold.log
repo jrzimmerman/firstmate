@@ -1,0 +1,48 @@
+scout-board-design
+--- backlog
+## In flight
+
+## Queued
+- [ ] plan-scout - investigate the board (since 2026-10-30)
+
+- [ ] scout-board-design - board review the scout raised (repo: firstmate) (kind: captain) (since 2026-10-30) (hold: fm-hold-v1:YXdhaXRpbmcgdGhlIGNhcHRhaW4gb24gdGhlIGJvYXJkIHJldmlldw==) (hold-kind: captain)
+  Captain hold set: 2026-10-30T05:18:33Z
+  Captain hold origin: plan-scout
+
+  Origin: plan-scout
+## Done
+--- driving watcher (/Users/justin/.no-mistakes/worktrees/acf03fba152a/01M65HRRKZ7RA864227FMGEYT8/bin) for 75s on live pane fm:fm-scout, status: working: still investigating the board
+  t=6s watcher #1 exited with wake: stale: fm:fm-scout|
+  t=19s watcher #2 exited with wake: stale: fm:fm-scout|
+  t=31s watcher #3 exited with wake: stale: fm:fm-scout|
+  t=43s watcher #4 exited with wake: stale: fm:fm-scout|
+  t=55s watcher #5 exited with wake: stale: fm:fm-scout|
+  t=67s watcher #6 exited with wake: stale: fm:fm-scout|
+  t=75s watcher #7 still running at end (absorbing)
+--- pane at end:
+> board review ready
+  Opus 5.5 | ctx 41% | 5h 61% (in 4h53m)
+--- state:
+. .. .count-fm_fm-scout .drain.err .hash-fm_fm-scout .heartbeat-streak .inactive-outcome-reconcile .last-check .last-heartbeat .last-watcher-beat .secondmate-liveness-tick .seen-plan-scout_status .stale-fm_fm-scout .wake-queue .wake-queue.seq .watch-deliveries.log .watch-triage.log .watcher-down home-summary.json plan-scout.meta plan-scout.status terminal-outcomes 
+== /var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T//fm-lab.HnxeFR/watch.1.out
+stale: fm:fm-scout
+== /var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T//fm-lab.HnxeFR/watch.2.out
+stale: fm:fm-scout
+== /var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T//fm-lab.HnxeFR/watch.3.out
+stale: fm:fm-scout
+== /var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T//fm-lab.HnxeFR/watch.4.out
+stale: fm:fm-scout
+== /var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T//fm-lab.HnxeFR/watch.5.out
+stale: fm:fm-scout
+== /var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T//fm-lab.HnxeFR/watch.6.out
+stale: fm:fm-scout
+== /var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T//fm-lab.HnxeFR/watch.7.out
+count=0
+--- triage log:
+[2026-10-30T01:18:41-0400] absorbed non-terminal stale timer reset: fm:fm-scout
+[2026-10-30T01:18:53-0400] absorbed non-terminal stale timer reset: fm:fm-scout
+[2026-10-30T01:19:06-0400] absorbed non-terminal stale timer reset: fm:fm-scout
+[2026-10-30T01:19:18-0400] absorbed non-terminal stale timer reset: fm:fm-scout
+[2026-10-30T01:19:30-0400] absorbed non-terminal stale timer reset: fm:fm-scout
+[2026-10-30T01:19:42-0400] absorbed non-terminal stale timer reset: fm:fm-scout
+RESULT label=fixed-working-origin-hold watcher_launches=7 wake_exits=6
