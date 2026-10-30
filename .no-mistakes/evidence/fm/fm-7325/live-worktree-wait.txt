@@ -1,0 +1,106 @@
+===== S1 invalid value '0' =====
+config/worktree-wait: '0'
+windows before: tmux 
+fm-gate-refuse: gate agent lifecycle permitted only against lab home $LAB
+error: config/worktree-wait must be a positive integer of seconds (at most 9 digits), got '0'
+exit=1 elapsed=0s
+windows after: bash 
+meta: <none>
+
+===== S1 invalid value 'abc' =====
+config/worktree-wait: 'abc'
+windows before: bash 
+fm-gate-refuse: gate agent lifecycle permitted only against lab home $LAB
+error: config/worktree-wait must be a positive integer of seconds (at most 9 digits), got 'abc'
+exit=1 elapsed=0s
+windows after: bash 
+meta: <none>
+
+===== S1 invalid value '-5' =====
+config/worktree-wait: '-5'
+windows before: bash 
+fm-gate-refuse: gate agent lifecycle permitted only against lab home $LAB
+error: config/worktree-wait must be a positive integer of seconds (at most 9 digits), got '-5'
+exit=1 elapsed=0s
+windows after: bash 
+meta: <none>
+
+===== S1 invalid value '1234567890' =====
+config/worktree-wait: '1234567890'
+windows before: bash 
+fm-gate-refuse: gate agent lifecycle permitted only against lab home $LAB
+error: config/worktree-wait must be a positive integer of seconds (at most 9 digits), got '1234567890'
+exit=1 elapsed=0s
+windows after: bash 
+meta: <none>
+
+===== S2 configured 5s on a 40s slot =====
+config/worktree-wait: '5'
+windows before: bash 
+fm-gate-refuse: gate agent lifecycle permitted only against lab home $LAB
+warning: $LAB/data/lab-short/launch-brief.md records no ship branch; defaulting to legacy branch fm/lab-short
+warning: $LAB/data/lab-short/launch-brief.md records no delivery contract line (scaffolded before ship briefs recorded one); launching on the explicit --mode local-only - confirm its definition of done matches
+notice: lab-short ships mode=local-only while the standing posture for short is no-mistakes - less rigor than the captain's standing posture; proceed only on a current explicit captain instruction or an intake judgment you can state
+error: treehouse get did not enter an isolated worktree within 5s (last seen '$LAB/src/short': it is the spawning project itself; spawning project '$LAB/src/short'); inspect window primary:fm-lab-short
+exit=1 elapsed=7s
+windows after: bash fm-lab-short 
+meta: <none>
+
+===== S3 absent config on a 75s slot (default 60) =====
+config/worktree-wait: <absent>
+windows before: bash fm-lab-short 
+fm-gate-refuse: gate agent lifecycle permitted only against lab home $LAB
+warning: $LAB/data/lab-default/launch-brief.md records no ship branch; defaulting to legacy branch fm/lab-default
+warning: $LAB/data/lab-default/launch-brief.md records no delivery contract line (scaffolded before ship briefs recorded one); launching on the explicit --mode local-only - confirm its definition of done matches
+notice: lab-default ships mode=local-only while the standing posture for dflt is no-mistakes - less rigor than the captain's standing posture; proceed only on a current explicit captain instruction or an intake judgment you can state
+error: treehouse get did not enter an isolated worktree within 60s (last seen '$LAB/src/dflt': it is the spawning project itself; spawning project '$LAB/src/dflt'); inspect window primary:fm-lab-default
+exit=1 elapsed=67s
+windows after: bash fm-lab-short fm-lab-default 
+meta: <none>
+
+===== S4 configured 120s on a 75s slot =====
+config/worktree-wait: '120'
+windows before: bash fm-lab-short fm-lab-default 
+fm-gate-refuse: gate agent lifecycle permitted only against lab home $LAB
+warning: $LAB/data/lab-slow/launch-brief.md records no ship branch; defaulting to legacy branch fm/lab-slow
+warning: $LAB/data/lab-slow/launch-brief.md records no delivery contract line (scaffolded before ship briefs recorded one); launching on the explicit --mode local-only - confirm its definition of done matches
+notice: lab-slow ships mode=local-only while the standing posture for slow is no-mistakes - less rigor than the captain's standing posture; proceed only on a current explicit captain instruction or an intake judgment you can state
+spawned lab-slow harness=codex kind=ship mode=local-only yolo=off window=primary:fm-lab-slow worktree=$LAB/pool/.treehouse/slow-369012/1/slow
+exit=0 elapsed=81s
+windows after: bash fm-lab-short fm-lab-default fm-lab-slow 
+meta: worktree=$LAB/pool/.treehouse/slow-369012/1/slow harness=codex 
+
+===== pane capture (primary) =====
+bw_x3qs_66fwtm0rbmn40000gn/T/fm-lab.5IdHpn/out-lab-short.txt; touch /private/var
+/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T/fm-lab.5IdHpn/done-lab-short
+bash-5.3$ SECONDS=0; bin/fm-spawn.sh lab-default /private/var/folders/rm/y8k0bw_
+x3qs_66fwtm0rbmn40000gn/T/fm-lab.5IdHpn/src/dflt --mode local-only --yolo off >
+$LAB/out-lab-d
+efault.txt 2>&1; echo "exit=$? elapsed=${SECONDS}s" >> /private/var/folders/rm/y
+8k0bw_x3qs_66fwtm0rbmn40000gn/T/fm-lab.5IdHpn/out-lab-default.txt; touch /privat
+e/var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T/fm-lab.5IdHpn/done-lab-default
+bash-5.3$ SECONDS=0; bin/fm-spawn.sh lab-slow /private/var/folders/rm/y8k0bw_x3q
+s_66fwtm0rbmn40000gn/T/fm-lab.5IdHpn/src/slow --mode local-only --yolo off > /pr
+ivate/var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T/fm-lab.5IdHpn/out-lab-slow
+.txt 2>&1; echo "exit=$? elapsed=${SECONDS}s" >> /private/var/folders/rm/y8k0bw_
+x3qs_66fwtm0rbmn40000gn/T/fm-lab.5IdHpn/out-lab-slow.txt; touch /private/var/fol
+ders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T/fm-lab.5IdHpn/done-lab-slow
+bash-5.3$
+rm: /private/var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T/fm-lab.5IdHpn/state/lab-slow.git-hooks/pre-rebase: Permission denied
+rm: /private/var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T/fm-lab.5IdHpn/state/lab-slow.git-hooks/pre-applypatch: Permission denied
+rm: /private/var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T/fm-lab.5IdHpn/state/lab-slow.git-hooks/pre-auto-gc: Permission denied
+rm: /private/var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T/fm-lab.5IdHpn/state/lab-slow.git-hooks/pre-merge-commit: Permission denied
+rm: /private/var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T/fm-lab.5IdHpn/state/lab-slow.git-hooks/post-commit: Permission denied
+rm: /private/var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T/fm-lab.5IdHpn/state/lab-slow.git-hooks/sendemail-validate: Permission denied
+rm: /private/var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T/fm-lab.5IdHpn/state/lab-slow.git-hooks/applypatch-msg: Permission denied
+rm: /private/var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T/fm-lab.5IdHpn/state/lab-slow.git-hooks/prepare-commit-msg: Permission denied
+rm: /private/var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T/fm-lab.5IdHpn/state/lab-slow.git-hooks/post-checkout: Permission denied
+rm: /private/var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T/fm-lab.5IdHpn/state/lab-slow.git-hooks/post-applypatch: Permission denied
+rm: /private/var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T/fm-lab.5IdHpn/state/lab-slow.git-hooks/post-rewrite: Permission denied
+rm: /private/var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T/fm-lab.5IdHpn/state/lab-slow.git-hooks/commit-msg: Permission denied
+rm: /private/var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T/fm-lab.5IdHpn/state/lab-slow.git-hooks/pre-push: Permission denied
+rm: /private/var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T/fm-lab.5IdHpn/state/lab-slow.git-hooks/post-merge: Permission denied
+rm: /private/var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T/fm-lab.5IdHpn/state/lab-slow.git-hooks/pre-commit: Permission denied
+rm: /private/var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T/fm-lab.5IdHpn/state/lab-slow.git-hooks: Directory not empty
+rm: /private/var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T/fm-lab.5IdHpn/state: Directory not empty
+rm: /private/var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T/fm-lab.5IdHpn: Directory not empty
