@@ -1,0 +1,26 @@
+## AFTER: no publication target (shallow clone, origin removed) - no dead remedy
+$ fm-brief.sh i7324-notarget --kind ship --mode no-mistakes --project /var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T//fm-7324.Hl790S/mono-noremote --upstream-consent github.com/acme/mono
+error: cannot determine whether /var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T//fm-7324.Hl790S/mono-noremote shares firstmate's history (the code root /Users/justin/.no-mistakes/worktrees/acf03fba152a/01M651G0NK0H39BDMD33PKCCFQ has no readable history, or a shallow clone shares no root commit), so publishing needs an explicit grant for its target or full history (git fetch --unshallow), but no publication target can be determined (no upstream, github, or origin remote on /var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T//fm-7324.Hl790S/mono-noremote)
+[exit 1]
+
+## AFTER: maintainer scope for the project's own target
+$ echo 'maintainer github.com/acme/mono' > $LAB/config/firstmate-role
+$ fm-role.sh check /var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T//fm-7324.Hl790S/mono
+authorized: maintainer scope github.com/acme/mono
+[exit 0]
+
+$ fm-brief.sh i7324-maint --kind ship --mode no-mistakes --project /var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T//fm-7324.Hl790S/mono
+scaffolded: /var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T//fm-lab.XZnLrt/data/i7324-maint/brief.md (ship, mode=no-mistakes; replace {TASK} and {FIRSTMATE_SPEC})
+[exit 0]
+
+## AFTER: maintainer scope for a different repo does not authorize
+$ echo 'maintainer github.com/other/repo' > $LAB/config/firstmate-role
+$ fm-role.sh check /var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T//fm-7324.Hl790S/mono
+refused: cannot determine whether /var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T//fm-7324.Hl790S/mono shares firstmate's history (the code root /Users/justin/.no-mistakes/worktrees/acf03fba152a/01M651G0NK0H39BDMD33PKCCFQ has no readable history, or a shallow clone shares no root commit), so publishing needs an explicit grant for its target or full history (git fetch --unshallow); this home runs as firstmate user/operator and holds no publication authority for github.com/acme/mono
+[exit 1]
+
+## AFTER: regression - firstmate's own repo still refused under user/operator
+$ fm-role.sh check /Users/justin/.no-mistakes/worktrees/acf03fba152a/01M651G0NK0H39BDMD33PKCCFQ
+refused: this home runs as firstmate user/operator and holds no publication authority for github.com/kunchenguid/firstmate
+[exit 1]
+

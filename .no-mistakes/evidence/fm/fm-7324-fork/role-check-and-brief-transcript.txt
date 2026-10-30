@@ -1,0 +1,38 @@
+### Lab home: /var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T//fm-lab.XZnLrt (no firstmate-role file -> default user/operator); project: /var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T//fm-7324.Hl790S/mono (shallow=true, origin=git@github.com:acme/mono.git)
+
+## BEFORE (base b936f04)
+$ fm-role.sh check /var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T//fm-7324.Hl790S/mono
+refused: cannot determine whether /var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T//fm-7324.Hl790S/mono shares firstmate's history (the code root /Users/justin/.no-mistakes/worktrees/acf03fba152a/01M651G0NK0H39BDMD33PKCCFQ has no readable history, or a shallow clone shares no root commit); fetch full history (git fetch --unshallow) before dispatching publishing work
+[exit 1]
+
+$ fm-role.sh check /var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T//fm-7324.Hl790S/mono upstream-consent github.com/acme/mono
+refused: cannot determine whether /var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T//fm-7324.Hl790S/mono shares firstmate's history (the code root /Users/justin/.no-mistakes/worktrees/acf03fba152a/01M651G0NK0H39BDMD33PKCCFQ has no readable history, or a shallow clone shares no root commit); fetch full history (git fetch --unshallow) before dispatching publishing work
+[exit 1]
+
+$ fm-brief.sh i7324-before --kind ship --mode no-mistakes --project /var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T//fm-7324.Hl790S/mono --upstream-consent github.com/acme/mono
+error: cannot determine whether /var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T//fm-7324.Hl790S/mono shares firstmate's history (the code root /Users/justin/.no-mistakes/worktrees/acf03fba152a/01M651G0NK0H39BDMD33PKCCFQ has no readable history, or a shallow clone shares no root commit); fetch full history (git fetch --unshallow) before dispatching publishing work
+error: to let this home publish to github.com/acme/mono, write 'maintainer github.com/acme/mono' into /var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T//fm-lab.XZnLrt/config/firstmate-role (docs/configuration.md "Firstmate role"), or pass --upstream-consent github.com/acme/mono for this one task with the captain's explicit approval
+[exit 1]
+
+## AFTER (885033b7)
+$ fm-role.sh check /var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T//fm-7324.Hl790S/mono
+refused: cannot determine whether /var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T//fm-7324.Hl790S/mono shares firstmate's history (the code root /Users/justin/.no-mistakes/worktrees/acf03fba152a/01M651G0NK0H39BDMD33PKCCFQ has no readable history, or a shallow clone shares no root commit), so publishing needs an explicit grant for its target or full history (git fetch --unshallow); this home runs as firstmate user/operator and holds no publication authority for github.com/acme/mono
+[exit 1]
+
+$ fm-role.sh check /var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T//fm-7324.Hl790S/mono upstream-consent github.com/acme/mono
+authorized: task consent for github.com/acme/mono
+[exit 0]
+
+$ fm-role.sh check /var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T//fm-7324.Hl790S/mono upstream-consent github.com/kunchenguid/firstmate
+refused: cannot determine whether /var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T//fm-7324.Hl790S/mono shares firstmate's history (the code root /Users/justin/.no-mistakes/worktrees/acf03fba152a/01M651G0NK0H39BDMD33PKCCFQ has no readable history, or a shallow clone shares no root commit), so publishing needs an explicit grant for its target or full history (git fetch --unshallow); this home runs as firstmate user/operator and holds no publication authority for github.com/acme/mono
+[exit 1]
+
+$ fm-brief.sh i7324-nogrant --kind ship --mode no-mistakes --project /var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T//fm-7324.Hl790S/mono
+error: cannot determine whether /var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T//fm-7324.Hl790S/mono shares firstmate's history (the code root /Users/justin/.no-mistakes/worktrees/acf03fba152a/01M651G0NK0H39BDMD33PKCCFQ has no readable history, or a shallow clone shares no root commit), so publishing needs an explicit grant for its target or full history (git fetch --unshallow); this home runs as firstmate user/operator and holds no publication authority for github.com/acme/mono
+error: to let this home publish to github.com/acme/mono, write 'maintainer github.com/acme/mono' into /var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T//fm-lab.XZnLrt/config/firstmate-role (docs/configuration.md "Firstmate role"), or pass --upstream-consent github.com/acme/mono for this one task with the captain's explicit approval
+[exit 1]
+
+$ fm-brief.sh i7324-consent --kind ship --mode no-mistakes --project /var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T//fm-7324.Hl790S/mono --upstream-consent github.com/acme/mono
+scaffolded: /var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T//fm-lab.XZnLrt/data/i7324-consent/brief.md (ship, mode=no-mistakes; replace {TASK} and {FIRSTMATE_SPEC})
+[exit 0]
+

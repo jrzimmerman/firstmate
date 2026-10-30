@@ -1,0 +1,41 @@
+### Real bin/fm-spawn.sh run inside lab tmux socket fm-lab, FM_HOME=/private/var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T/fm-lab.XZnLrt (default user/operator role), shallow unrelated project with origin github.com/acme/mono
+
+## BEFORE (base b936f04): named remedy --upstream-consent still refused
+$ (base b936f04) bin/fm-spawn.sh i7324-sp4 /var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T//fm-7324.Hl790S/mono claude --mode no-mistakes --yolo off --upstream-consent github.com/acme/mono
+fm-gate-refuse: gate agent lifecycle permitted only against lab home /private/var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T/fm-lab.XZnLrt
+error: spawn refused for i7324-sp4: cannot determine whether /var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T/fm-7324.Hl790S/mono shares firstmate's history (the code root /var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T/fm-7324.Hl790S/base has no readable history, or a shallow clone shares no root commit); fetch full history (git fetch --unshallow) before dispatching publishing work
+error: to let this home publish to github.com/acme/mono, write 'maintainer github.com/acme/mono' into /private/var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T/fm-lab.XZnLrt/config/firstmate-role (docs/configuration.md "Firstmate role"), or pass --upstream-consent github.com/acme/mono for this one task with the captain's explicit approval
+[exit 1]
+DRIVE-DONE
+
+## AFTER (885033b7)
+TMUX=/private/var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T/fm-lab.XZnLrt/tmux/tmux-501/fm-lab,59372,0
+$ bin/fm-spawn.sh i7324-sp1 /var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T//fm-7324.Hl790S/mono claude --mode no-mistakes --yolo off 
+fm-gate-refuse: gate agent lifecycle permitted only against lab home /private/var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T/fm-lab.XZnLrt
+error: spawn refused for i7324-sp1: cannot determine whether /var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T/fm-7324.Hl790S/mono shares firstmate's history (the code root /Users/justin/.no-mistakes/worktrees/acf03fba152a/01M651G0NK0H39BDMD33PKCCFQ has no readable history, or a shallow clone shares no root commit), so publishing needs an explicit grant for its target or full history (git fetch --unshallow); this home runs as firstmate user/operator and holds no publication authority for github.com/acme/mono
+error: to let this home publish to github.com/acme/mono, write 'maintainer github.com/acme/mono' into /private/var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T/fm-lab.XZnLrt/config/firstmate-role (docs/configuration.md "Firstmate role"), or pass --upstream-consent github.com/acme/mono for this one task with the captain's explicit approval
+[exit 1]
+
+$ bin/fm-spawn.sh i7324-sp2 /var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T//fm-7324.Hl790S/mono claude --mode no-mistakes --yolo off --upstream-consent github.com/acme/mono
+fm-gate-refuse: gate agent lifecycle permitted only against lab home /private/var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T/fm-lab.XZnLrt
+error: treehouse get did not enter an isolated worktree within 60s (last seen '/private/var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T/fm-7324.Hl790S/mono': it is the spawning project itself; spawning project '/var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T/fm-7324.Hl790S/mono'); inspect window primary:fm-i7324-sp2
+[exit 1]
+
+$ bin/fm-spawn.sh i7324-sp3 /var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T//fm-7324.Hl790S/mono-noremote claude --mode no-mistakes --yolo off 
+fm-gate-refuse: gate agent lifecycle permitted only against lab home /private/var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T/fm-lab.XZnLrt
+error: spawn refused for i7324-sp3: cannot determine whether /var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T/fm-7324.Hl790S/mono-noremote shares firstmate's history (the code root /Users/justin/.no-mistakes/worktrees/acf03fba152a/01M651G0NK0H39BDMD33PKCCFQ has no readable history, or a shallow clone shares no root commit), so publishing needs an explicit grant for its target or full history (git fetch --unshallow), but no publication target can be determined (no upstream, github, or origin remote on /var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T/fm-7324.Hl790S/mono-noremote)
+[exit 1]
+
+DRIVE-DONE
+
+## AFTER: pane of window fm-i7324-sp2 (consented spawn passed the role gate and reached treehouse worktree setup; fetch fails only because github.com/acme/mono is a fictitious fixture remote)
+treehouse get
+ /var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T/fm-7324.Hl790S/mono   main  treehouse get
+A new version of treehouse is available: v3.1.4 → v3.1.7
+Run "treehouse update" to update
+🌳 Setting up worktree...
+fetch failed: git fetch origin: ERROR: Repository not found.
+fatal: Could not read from remote repository.
+Please make sure you have the correct access rights
+and the repository exists.
+ ✘  /var/folders/rm/y8k0bw_x3qs_66fwtm0rbmn40000gn/T/fm-7324.Hl790S/mono   main 
