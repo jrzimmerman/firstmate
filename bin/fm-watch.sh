@@ -2546,9 +2546,11 @@ pause_state_class() {  # <window> <task>
 # and a row this home does not carry all keep alarming exactly as they do today -
 # a wait this watcher cannot prove is not a wait.
 #
-# The read costs one `open` subprocess, plus one `open-origin` subprocess only
-# for a task whose newest line is an open captain-relevant wait (below), and
-# runs where the watcher is about to alarm: for stale-pane callers, at most once per
+# The read costs one `open` subprocess. Only for a task whose newest line is an
+# open captain-relevant wait (below) does it add one `open-origin` subprocess,
+# which reads the backlog listing once, shows the origin, and shows each open
+# captain call whose listed body names it as origin. It runs where the watcher
+# is about to alarm: for stale-pane callers, at most once per
 # distinct stale hash per window, or once per STALE_ESCALATE_SECS at the wedge
 # threshold (wedge_wait_evidence), beside the crew-state read the same paths
 # already pay. The secondmate stale gate deliberately runs before this bound and

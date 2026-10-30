@@ -198,11 +198,9 @@
 # to the captain on OTHER tasks, the shape this lifecycle requires of an
 # investigation: is any row that is still an open captain call held for this
 # origin? Exit 0 yes, 1 no, 2 cannot tell. A row is held for the origin when
-# its `Captain hold origin:` line names it, or when it is a pre-collapse
-# `<origin>-decision-<key>` row (directly, or through the migration marker line
-# described below). With `--identity` an exit 0 prints each matching call's id
-# beside its lifecycle identity, so a new, released, or re-held call is a new
-# identity. bin/fm-watch.sh asks it beside `open` only for a task whose newest
+# its `Captain hold origin:` line names it. With `--identity` an exit 0 prints
+# each matching call's id beside its lifecycle identity, so a new, released, or
+# re-held call is a new identity. bin/fm-watch.sh asks it beside `open` only for a task whose newest
 # line is an open `needs-decision` or `blocked`, so a scout parked on a call the
 # captain is holding on another task is bounded like a held task itself, while a
 # scout still working beside such a call keeps its alarms.
@@ -2221,10 +2219,7 @@ command_open() {  # <task-id> [--identity] [--distinguish-absent]
 # Is there an open captain call held FOR <origin> on some other task? Exit 0
 # yes, 1 no, 2 cannot tell, with `open`'s meaning of "open" (not Done, hold kind
 # captain) applied to every row. A row belongs to the origin when its body
-# records `Captain hold origin: <origin>` (written by `hold --origin`), or when
-# it is a pre-collapse `<origin>-decision-<key>` row: under that legacy id, or,
-# on a migrated backlog, through the "migrated from data/backlog.md id
-# <origin>-decision-<key>" marker line fm-hold-migration left in its body.
+# records `Captain hold origin: <origin>` (written by `hold --origin`).
 # The origin is matched both as given and as its backend identity, the form
 # `hold --origin` stores. The origin's own row is never counted: `open` owns it.
 # With --identity, an exit 0 prints every matching call as
@@ -2267,14 +2262,14 @@ command_open_origin() {  # <origin-id> [--identity]
   # Only the first two comma-separated fields and the last are read: the id and
   # state are slugs ahead of any quoted title or body, and the requested
   # hold_kind field is a bare slug at the end, so commas inside them cannot shift
-  # those. Every way a row can belong to the origin names it somewhere on its
-  # one-line listing (the id, or the escaped body), so a row whose listing never
-  # names it is skipped without showing its record.
-  ids=$(printf '%s\n' "$listing" | awk -F, -v origin="$origin" -v origin_id="$origin_id" '
+  # those. The escaped body keeps the origin line on the row's one listing line,
+  # so a row whose listing never carries it is skipped without showing its record.
+  ids=$(printf '%s\n' "$listing" | awk -F, -v origin="Captain hold origin: $origin" \
+    -v origin_id="Captain hold origin: $origin_id" '
     /^  [A-Za-z0-9._-]+,/ {
       id = $1
       sub(/^ +/, "", id)
-      if ($2 != "done" && $NF == "captain" && (index($0, origin) || (origin_id != "" && index($0, origin_id)))) print id
+      if ($2 != "done" && $NF == "captain" && (index($0, origin) || index($0, origin_id))) print id
     }
   ')
   while IFS= read -r id; do
@@ -2287,15 +2282,7 @@ command_open_origin() {  # <origin-id> [--identity]
     show=$TASK_SHOW_OUTPUT
     body=$(decode_shown_value "$(show_field "$show" body)")
     stored=$(body_hold_origin "$body")
-    if [ -z "$stored" ] || { [ "$stored" != "$origin" ] && [ "$stored" != "$origin_id" ]; }; then
-      case "$id" in
-        "$origin-decision-"?*) : ;;
-        *)
-          printf '%s\n' "$body" \
-            | grep -F -e "migrated from data/backlog.md id $origin-decision-" >/dev/null || continue
-          ;;
-      esac
-    fi
+    [ -n "$stored" ] && { [ "$stored" = "$origin" ] || [ "$stored" = "$origin_id" ]; } || continue
     found="${found}${found:+$NL_SEP}$id@$(open_call_identity "$show")"
   done <<EOF
 $ids

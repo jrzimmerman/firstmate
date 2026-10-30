@@ -195,7 +195,7 @@ Only `answer` with the captain's words or evidence-backed `reconcile close` reso
 
 An investigation never holds its own row: each call it raises is held on a separate task recorded with `Captain hold origin: <origin>`.
 `open-origin <origin-id> [--identity]` is the read-only predicate for those calls, with `open`'s meaning of "open" applied to every row.
-A row counts when its origin line names the origin, or when it is a pre-collapse `<origin>-decision-<key>` row, directly or through its migration marker line.
+A row counts only when its `Captain hold origin:` line names the origin or its backend identity.
 The origin's own row never counts, because `open` owns it.
 
 | `open-origin` exit | Meaning |
