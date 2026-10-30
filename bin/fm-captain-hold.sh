@@ -2282,7 +2282,9 @@ command_open_origin() {  # <origin-id> [--identity]
     show=$TASK_SHOW_OUTPUT
     body=$(decode_shown_value "$(show_field "$show" body)")
     stored=$(body_hold_origin "$body")
-    [ -n "$stored" ] && { [ "$stored" = "$origin" ] || [ "$stored" = "$origin_id" ]; } || continue
+    if [ -z "$stored" ] || { [ "$stored" != "$origin" ] && [ "$stored" != "$origin_id" ]; }; then
+      continue
+    fi
     found="${found}${found:+$NL_SEP}$id@$(open_call_identity "$show")"
   done <<EOF
 $ids
