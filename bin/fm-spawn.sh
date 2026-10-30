@@ -331,7 +331,8 @@
 #   that never reaches an isolated worktree refuses at the end of that wait,
 #   naming the last path seen and why it was rejected. The wait polls once a
 #   second for 60 polls, or for the positive integer of seconds in this home's
-#   optional config/worktree-wait (docs/configuration.md "Worktree wait"); a
+#   optional config/worktree-wait (docs/configuration.md "Worktree wait"), and
+#   never fewer than the 2 polls one accepted read needs to be confirmed; a
 #   value that is not a positive integer of at most 9 digits refuses the fresh
 #   spawn before any endpoint, worktree, or record exists.
 #   That placement is proven only at launch. Every ship or scout therefore
@@ -5668,7 +5669,13 @@ elif [ "$KIND" != secondmate ] && [ "$BACKEND" != orca ]; then
     candidate=""
     last_seen=""
     last_reason="the pane reported no path"
-    for _ in $(seq 1 "$WORKTREE_WAIT"); do
+    # Acceptance needs two matching reads, so a 1-second bound still gets its
+    # one confirming read.
+    polls=0
+    max_polls=$WORKTREE_WAIT
+    [ "$max_polls" -ge 2 ] || max_polls=2
+    while [ "$polls" -lt "$max_polls" ]; do
+      polls=$((polls + 1))
       p=$(spawn_current_path "$WT_TARGET" || true)
       [ -z "$p" ] || last_seen="$p"
       if [ -n "$p" ] && spawn_worktree_isolated "$p"; then

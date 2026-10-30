@@ -1036,6 +1036,7 @@ Without it, the wait is 60 seconds.
 The file holds one positive integer of seconds, at most 9 digits, for example `180`.
 Any other value, including `0`, a negative number, or text, refuses the spawn before any endpoint, worktree, or record exists, with an error naming `config/worktree-wait`.
 The same value bounds the wait and appears in the refusal when the wait runs out.
+A value of `1` still gets the second read that confirms the worktree, so it can succeed.
 It applies only on the backends that discover the worktree from the task pane, so Orca, T3 Code, relaunches, and secondmate launches never read it.
 The file is per home and is not inherited by secondmate homes.
 The [`fm-spawn.sh` header](../bin/fm-spawn.sh) owns the wait and its isolation screening.

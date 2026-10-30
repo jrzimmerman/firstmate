@@ -272,6 +272,24 @@ test_configured_wait_bounds_poll_and_refusal() {
   pass "config/worktree-wait bounds both the poll and the refusal"
 }
 
+# The minimum bound still gets the confirming read that acceptance needs, so a
+# pane already in its worktree spawns under config/worktree-wait=1.
+test_minimum_configured_wait_accepts_a_settled_pane() {
+  local rec id out status
+  id=settle-wait-one-z9
+  rec=$(make_primary_case settle-wait-one "$id" 0)
+  read_settle_record "$rec"
+  fm_test_fake_sleep_noop "$FAKEBIN_DIR"
+  printf '1\n' > "$HOME_DIR/config/worktree-wait"
+
+  out=$(run_settle_spawn "$id")
+  status=$?
+  expect_code 0 "$status" "spawn should accept an already-settled pane under a 1 second bound"$'\n'"$out"
+  assert_grep "worktree=$WT_DIR" "$HOME_DIR/state/$id.meta" \
+    "meta did not record the already-settled worktree under the minimum bound"
+  pass "config/worktree-wait=1 accepts a pane already in its worktree"
+}
+
 # A value that is not a positive integer refuses before the pane is ever read
 # or any record exists, naming the setting.
 test_invalid_configured_wait_is_refused_before_launch() {
@@ -321,6 +339,7 @@ test_transient_primary_checkout_is_not_accepted
 test_primary_checkout_that_never_settles_fails_at_the_deadline
 test_configured_wait_admits_a_slow_slot
 test_configured_wait_bounds_poll_and_refusal
+test_minimum_configured_wait_accepts_a_settled_pane
 test_invalid_configured_wait_is_refused_before_launch
 test_unborn_head_project_is_refused_at_once
 
