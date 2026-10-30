@@ -329,7 +329,11 @@
 #   out as a transient rather than adopted and then refused, so a home that is
 #   itself a linked worktree of the project repository still launches. A pane
 #   that never reaches an isolated worktree refuses at the end of that wait,
-#   naming the last path seen and why it was rejected.
+#   naming the last path seen and why it was rejected. The wait polls once a
+#   second for 60 polls, or for the positive integer of seconds in this home's
+#   optional config/worktree-wait (docs/configuration.md "Worktree wait"); a
+#   value that is not a positive integer of at most 9 digits refuses the fresh
+#   spawn before any endpoint, worktree, or record exists.
 #   That placement is proven only at launch. Every ship or scout therefore
 #   receives `FM_TASK_ID=<task-id>` before launch, on the same backend-specific
 #   environment channel as GOTMPDIR, and bin/fm-test-run.sh refuses to execute the
@@ -3133,6 +3137,23 @@ fi
 if [ "$HARNESS" = agy ]; then
   agy_model_validate "$AGY_BIN" "$MODEL" || exit 1
 fi
+# Worktree wait bound (header above): read before any endpoint, worktree, or
+# record exists, and only on the fresh ship or scout path that runs the
+# treehouse-get wait, so an invalid value refuses before anything is leased.
+WORKTREE_WAIT=60
+if [ "$RELAUNCH" -eq 0 ] && [ "$KIND" != secondmate ] && [ "$BACKEND" != orca ] \
+  && [ "$BACKEND" != t3code ] && [ -e "$CONFIG/worktree-wait" ]; then
+  worktree_wait_raw=$(cat "$CONFIG/worktree-wait")
+  case "$worktree_wait_raw" in
+  '' | *[!0-9]*) WORKTREE_WAIT=0 ;;
+  ??????????*) WORKTREE_WAIT=0 ;;
+  *) WORKTREE_WAIT=$((10#$worktree_wait_raw)) ;;
+  esac
+  if [ "$WORKTREE_WAIT" -eq 0 ]; then
+    echo "error: config/worktree-wait must be a positive integer of seconds (at most 9 digits), got '$worktree_wait_raw'" >&2
+    exit 1
+  fi
+fi
 # polytoken's model validation composes firstmate's model and effort axes into
 # the launch model reference (bin/fm-polytoken-lib.sh owns the reasoning): the
 # base model must be concrete and listed, and effort maps to the nearest
@@ -5647,7 +5668,7 @@ elif [ "$KIND" != secondmate ] && [ "$BACKEND" != orca ]; then
     candidate=""
     last_seen=""
     last_reason="the pane reported no path"
-    for _ in $(seq 1 60); do
+    for _ in $(seq 1 "$WORKTREE_WAIT"); do
       p=$(spawn_current_path "$WT_TARGET" || true)
       [ -z "$p" ] || last_seen="$p"
       if [ -n "$p" ] && spawn_worktree_isolated "$p"; then
@@ -5665,7 +5686,7 @@ elif [ "$KIND" != secondmate ] && [ "$BACKEND" != orca ]; then
       sleep 1
     done
     if [ -z "$WT" ]; then
-      echo "error: treehouse get did not enter an isolated worktree within 60s (last seen '${last_seen:-none}': $last_reason; spawning project '$PROJ_ABS'); $(spawn_endpoint_hint)" >&2
+      echo "error: treehouse get did not enter an isolated worktree within ${WORKTREE_WAIT}s (last seen '${last_seen:-none}': $last_reason; spawning project '$PROJ_ABS'); $(spawn_endpoint_hint)" >&2
       exit 1
     fi
 
