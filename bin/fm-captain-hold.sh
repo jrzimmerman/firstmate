@@ -202,8 +202,10 @@
 # `<origin>-decision-<key>` row (directly, or through the migration marker line
 # described below). With `--identity` an exit 0 prints each matching call's id
 # beside its lifecycle identity, so a new, released, or re-held call is a new
-# identity. bin/fm-watch.sh asks it beside `open`, so a parked scout whose call
-# the captain is holding on another task is bounded like a held task itself.
+# identity. bin/fm-watch.sh asks it beside `open` only for a task whose newest
+# line is an open `needs-decision` or `blocked`, so a scout parked on a call the
+# captain is holding on another task is bounded like a held task itself, while a
+# scout still working beside such a call keeps its alarms.
 #
 # `diverged` is the read-only guard over the seam between the two records of
 # one captain call. See "record divergence" beside command_diverged below.
@@ -2250,21 +2252,6 @@ command_open_origin() {  # <origin-id> [--identity]
   esac
   open_backlog_resolve || resolve_status=$?
   [ "$resolve_status" -ne 3 ] || return 1
-  listing=$(fm_backlog_row_list "$OPEN_DATA" --fields hold_kind) || list_status=$?
-  if [ "$list_status" -ne 0 ]; then
-    printf 'fm-captain-hold: the backlog listing could not be read: %s\n' "${listing%%$'\n'*}" >&2
-    exit 2
-  fi
-  # Only the first two comma-separated fields and the last are read: the id and
-  # state are slugs ahead of any quoted title, and the requested hold_kind field
-  # is a bare slug at the end, so a title with commas cannot shift them.
-  ids=$(printf '%s\n' "$listing" | awk -F, '
-    /^  [A-Za-z0-9._-]+,/ {
-      id = $1
-      sub(/^ +/, "", id)
-      if ($2 != "done" && $NF == "captain") print id
-    }
-  ')
   origin_id=$origin
   if task_show "$origin"; then
     origin_id=$(show_field_value "$TASK_SHOW_OUTPUT" id)
@@ -2272,6 +2259,24 @@ command_open_origin() {  # <origin-id> [--identity]
     printf 'fm-captain-hold: could not resolve the backend identity of %s\n' "$origin" >&2
     exit 2
   fi
+  listing=$(fm_backlog_row_list "$OPEN_DATA" --fields body,hold_kind) || list_status=$?
+  if [ "$list_status" -ne 0 ]; then
+    printf 'fm-captain-hold: the backlog listing could not be read: %s\n' "${listing%%$'\n'*}" >&2
+    exit 2
+  fi
+  # Only the first two comma-separated fields and the last are read: the id and
+  # state are slugs ahead of any quoted title or body, and the requested
+  # hold_kind field is a bare slug at the end, so commas inside them cannot shift
+  # those. Every way a row can belong to the origin names it somewhere on its
+  # one-line listing (the id, or the escaped body), so a row whose listing never
+  # names it is skipped without showing its record.
+  ids=$(printf '%s\n' "$listing" | awk -F, -v origin="$origin" -v origin_id="$origin_id" '
+    /^  [A-Za-z0-9._-]+,/ {
+      id = $1
+      sub(/^ +/, "", id)
+      if ($2 != "done" && $NF == "captain" && (index($0, origin) || (origin_id != "" && index($0, origin_id)))) print id
+    }
+  ')
   while IFS= read -r id; do
     [ -n "$id" ] || continue
     [ "$id" != "$origin" ] && [ "$id" != "$origin_id" ] || continue

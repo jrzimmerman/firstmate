@@ -2546,8 +2546,9 @@ pause_state_class() {  # <window> <task>
 # and a row this home does not carry all keep alarming exactly as they do today -
 # a wait this watcher cannot prove is not a wait.
 #
-# The read costs two subprocesses (`open` and `open-origin`, below) and runs
-# where the watcher is about to alarm: for stale-pane callers, at most once per
+# The read costs one `open` subprocess, plus one `open-origin` subprocess only
+# for a task whose newest line is an open captain-relevant wait (below), and
+# runs where the watcher is about to alarm: for stale-pane callers, at most once per
 # distinct stale hash per window, or once per STALE_ESCALATE_SECS at the wedge
 # threshold (wedge_wait_evidence), beside the crew-state read the same paths
 # already pay. The secondmate stale gate deliberately runs before this bound and
@@ -2562,18 +2563,22 @@ CAPTAIN_CALL_IDENTITY=
 
 # The call need not sit on the task's own row. An investigation never holds its
 # own row: captain-hold-lifecycle has it hold each call on a separate task that
-# records it as the origin, so a parked scout whose newest line asks for the
-# captain's decision is just as much a wait. `open-origin` reads those rows, and
-# both answers are folded into one identity, so a call newly held on either side
-# - or released and re-held - is a new identity and its first sight still alarms.
+# records it as the origin. Such a call is a wait only while the task is parked
+# on it - its newest line an open `needs-decision` or `blocked` it wrote - so a
+# task still working beside an open origin-linked call keeps every alarm and its
+# wedge ladder. `open-origin` reads those rows, and both answers are folded into
+# one identity, so a call newly held on either side - or released and re-held -
+# is a new identity and its first sight still alarms.
 task_captain_call_open() {  # <task>
   local task=$1 own='' linked=''
   CAPTAIN_CALL_IDENTITY=
   [ -n "$task" ] || return 1
   own=$(FM_HOME="$FM_HOME" "$SCRIPT_DIR/fm-captain-hold.sh" \
     open "$task" --identity 2>/dev/null) || own=
-  linked=$(FM_HOME="$FM_HOME" "$SCRIPT_DIR/fm-captain-hold.sh" \
-    open-origin "$task" --identity 2>/dev/null) || linked=
+  if status_worker_wait_verb "$STATE/$task.status" >/dev/null; then
+    linked=$(FM_HOME="$FM_HOME" "$SCRIPT_DIR/fm-captain-hold.sh" \
+      open-origin "$task" --identity 2>/dev/null) || linked=
+  fi
   [ -n "$own" ] || [ -n "$linked" ] || return 1
   CAPTAIN_CALL_IDENTITY="own=$own;origin=$linked"
   return 0

@@ -694,7 +694,7 @@ hold_stale_wakes() {  # <state>
 # the captain-relevant stale branch, and a worker line that routes through the
 # inconclusive one. The hold is invisible to the status line in both, so both
 # branches had the same blindness and both are covered.
-# The `origin` rows are a parked scout: its newest line asks for the captain's
+# The `origin` row is a parked scout: its newest line asks for the captain's
 # decision, and the call itself is held on a separate task that records the
 # scout as its origin. Bounding only the task's own row let every pane tick of
 # such a scout (a ticking status line) re-alarm for the whole decision.
@@ -705,8 +705,7 @@ test_open_captain_call_bounds_stale_churn() {
   for spec in \
     'held-delivery|hold|done: PR https://example.invalid/pull/1 checks green' \
     'held-worker-line|hold|working: still tidying the branch' \
-    'origin-decision|origin|needs-decision [key=board-review]: the board is ready for the captain' \
-    'origin-worker-line|origin|working: still tidying the branch'
+    'origin-decision|origin|needs-decision [key=board-review]: the board is ready for the captain'
   do
     name=${spec%%|*}; mode=${spec#*|}; line=${mode#*|}; mode=${mode%%|*}
     dir=$(make_hold_home "$name" "$line" "$mode") \
@@ -755,8 +754,10 @@ test_open_captain_call_bounds_stale_churn() {
   done
 
   # A captain call held for some OTHER origin, or for none, says nothing about
-  # this task's wait, so every new hash keeps alarming.
+  # this task's wait, and neither does one held for it while it keeps working
+  # rather than parking on the decision, so every new hash keeps alarming.
   for spec in \
+    'origin-worker-line|origin|working: still tidying the branch' \
     'elsewhere-decision|elsewhere|needs-decision [key=board-review]: the board is ready for the captain' \
     'unrelated-decision|unrelated|needs-decision [key=board-review]: the board is ready for the captain'
   do
@@ -767,7 +768,7 @@ test_open_captain_call_bounds_stale_churn() {
     round=1
     while [ "$round" -le 2 ]; do
       hold_watch_surface "$dir" "$out" "$capture" "idle, elapsed ${round}s" \
-        || fail "[$name] a call held for another task bounded this window on round $round"
+        || fail "[$name] a call that is not this task's wait bounded this window on round $round"
       wakes=$(hold_stale_wakes "$state")
       [ "$wakes" -eq 1 ] \
         || fail "[$name] round $round produced $wakes wakes instead of one"
